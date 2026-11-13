@@ -69,9 +69,20 @@ const cloudOutputs =
         import.meta.glob('../amplify_outputs.json', { eager: true, import: 'default' }),
       )[0]
 const CloudApp = lazy(() => import('./CloudApp.jsx'))
+// Only reachable from the link in the README (see Demo.jsx).
+const DEMO_PARAM = 'demo'
+const Demo = lazy(() => import('./Demo.jsx'))
 
 function App() {
-  const code = new URLSearchParams(window.location.search).get(LINK_PARAM)
+  const params = new URLSearchParams(window.location.search)
+  if (params.has(DEMO_PARAM)) {
+    return (
+      <Suspense fallback={null}>
+        <Demo code={params.get(DEMO_PARAM)} outputs={cloudOutputs} />
+      </Suspense>
+    )
+  }
+  const code = params.get(LINK_PARAM)
   if (code !== null) return <CustomerView code={code} />
   if (cloudOutputs) {
     return (

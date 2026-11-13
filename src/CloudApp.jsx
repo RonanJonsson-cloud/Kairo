@@ -1,20 +1,13 @@
 import { useCallback, useEffect, useState } from 'react'
-import { Amplify } from 'aws-amplify'
-import { generateClient } from 'aws-amplify/data'
 import { Authenticator } from '@aws-amplify/ui-react'
 import '@aws-amplify/ui-react/styles.css'
+import BookingItem, { startOf } from './BookingItem.jsx'
 import BusinessPage, { DEFAULT_SETTINGS, withIds } from './BusinessPage.jsx'
 import CustomerPage from './CustomerPage.jsx'
+import Layout from './Layout.jsx'
 import SharePanel from './SharePanel.jsx'
-import { cleanRanges, datesFrom } from './assistantRules.js'
-import {
-  PAIRED_SERVICE,
-  formatDate,
-  formatRange,
-  timelineMinutes,
-  toDateString,
-  turnaroundError,
-} from './scheduling.js'
+import { GUEST, connect, describeTimes, readSlots } from './cloud.js'
+import { turnaroundError } from './scheduling.js'
 import { decodeBusiness, encodeBusiness } from './shareLink.js'
 
 // The app with its cloud backend: business owners sign in and save their
@@ -22,55 +15,7 @@ import { decodeBusiness, encodeBusiness } from './shareLink.js'
 // saved, so no two customers can book the same time.
 
 const BUSINESS_PARAM = 'id'
-// Customers don't sign in.
-const GUEST = { authMode: 'identityPool' }
 const BOOKING_FAILED = "Sorry, something went wrong and your time wasn't booked."
-const DESCRIBE_FAILED =
-  "Sorry, I couldn't read that just now. Please pick your dates on the calendar instead."
-
-let client = null
-function connect(outputs) {
-  if (!client) {
-    Amplify.configure(outputs)
-    client = generateClient()
-  }
-  return client
-}
-
-function Layout({ title, tagline, children }) {
-  return (
-    <div className="app">
-      <header className="app-header">
-        <h1>{title}</h1>
-        {tagline && <p className="tagline">{tagline}</p>}
-      </header>
-      <main className="content">{children}</main>
-    </div>
-  )
-}
-
-function readSlots(json) {
-  try {
-    const slots = typeof json === 'string' ? JSON.parse(json) : json
-    return Array.isArray(slots) ? slots : []
-  } catch {
-    return []
-  }
-}
-
-function startOf(booking) {
-  const first = booking.slots[0]
-  return first ? timelineMinutes(first.date, first.start) : 0
-}
-
-function contactLink(contact) {
-  return contact.includes('@') ? `mailto:${contact}` : `tel:${contact.replace(/[^\d+]/g, '')}`
-}
-
-function slotName(booking, index) {
-  if (booking.service !== PAIRED_SERVICE) return booking.service
-  return index === 0 ? 'Drop-off' : 'Pickup'
-}
 
 // Everything customers have booked, soonest first, with a way to cancel.
 function BookingsList({ db }) {
@@ -126,21 +71,7 @@ function BookingsList({ db }) {
       ) : (
         <ul className="hours-list" aria-label="Bookings">
           {bookings.map((booking) => (
-            <li key={booking.id} className="hours-item">
-              {booking.slots.map((slot, index) => (
-                <div key={index}>
-                  <strong>{slotName(booking, index)}</strong> {formatDate(slot.date)}{' '}
-                  {formatRange(slot)}
-                </div>
-              ))}
-              <div>
-                {booking.name} · <a href={contactLink(booking.contact)}>{booking.contact}</a>
-              </div>
-              {booking.comments && <p className="note">“{booking.comments}”</p>}
-              <button type="button" className="button small" onClick={() => cancel(booking)}>
-                Cancel booking
-              </button>
-            </li>
+            <BookingItem key={booking.id} booking={booking} onCancel={cancel} />
           ))}
         </ul>
       )}
@@ -303,16 +234,8 @@ function CustomerView({ db, id }) {
     return data
   }
 
-  // The AI assistant reads the customer's description of when they're free.
-  async function describe(text, { firstDate, days }) {
-    const { data, errors } = await db.queries.readAvailability(
-      { text, today: toDateString(new Date()), firstDate, days },
-      GUEST,
-    )
-    if (errors?.length || !data) return { ok: false, message: DESCRIBE_FAILED }
-    if (!data.ok) return { ok: false, message: data.message }
-    const allowed = datesFrom(firstDate, days).map(({ date }) => date)
-    return { ok: true, message: '', ranges: cleanRanges(readSlots(data.ranges), allowed) }
+  function describe(text, dates) {
+    return describeTimes(db, text, dates)
   }
 
   if (business === undefined || taken === null) {

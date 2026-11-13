@@ -36,11 +36,15 @@ function downloadPng(svg, fileName) {
 }
 
 // `link` replaces the link built from the settings (e.g. a saved business's
-// permanent link), and `note` the line under the buttons.
+// permanent link), and `note` the line under the buttons. `preview: false`
+// leaves out the Preview customer page button, and `intro` goes above the
+// QR code.
 function SharePanel({
   business,
   link: savedLink = null,
   note = 'Changes make a new link and QR code.',
+  preview = true,
+  intro = null,
 }) {
   const { name, hours } = business
   const [copied, setCopied] = useState(false)
@@ -94,6 +98,7 @@ function SharePanel({
   return (
     <section className="card share">
       <h2>Share with customers</h2>
+      {intro && <p className="hint">{intro}</p>}
       <div className="qr" ref={qrRef}>
         <QRCodeSVG
           value={link}
@@ -122,9 +127,11 @@ function SharePanel({
         >
           Download QR code
         </button>
-        <a className="button" href={link} target="_blank" rel="noreferrer">
-          Preview customer page
-        </a>
+        {preview && (
+          <a className="button" href={link} target="_blank" rel="noreferrer">
+            Preview customer page
+          </a>
+        )}
       </div>
 
       <p className="note">{note}</p>

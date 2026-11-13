@@ -505,3 +505,11 @@ a.button {
 .auth-caption h2 {
   margin: 0;
 }
+
+/* The demo's explanation at the top of each page. */
+.demo-banner {
+  margin: 0;
+  border-color: var(--accent);
+  background: var(--accent-soft);
+  font-size: 0.9375rem;
+}
