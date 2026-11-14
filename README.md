@@ -6,8 +6,6 @@
 
 **Try the demo (no sign-in):** https://main.d2pas0nuhvquyl.amplifyapp.com/?demo
 
-The demo opens a sample business that is already set up. Change its hours and services, then scan the QR code with your phone, or copy the link and paste it into your browser, to book as a customer. In the "What days are you usually free?" box, try something like "weekday mornings, but not Wednesday" to see the AI read your schedule. Your booking then shows up under **Bookings** on the business page. Demo changes and bookings stay in your browser only; **Reset demo** starts it over.
-
 **GitHub:** https://github.com/RonanJonsson-cloud/RyanHallBeddingService
 
 **Stack:**  React · Vite · AWS Amplify
