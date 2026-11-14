@@ -1,12 +1,12 @@
 # Kairo - An AI powered interactive scheduler
 
-[![CI](https://github.com/RonanJonsson-cloud/RyanHallBeddingService/actions/workflows/ci.yml/badge.svg)](https://github.com/RonanJonsson-cloud/RyanHallBeddingService/actions/workflows/ci.yml)
+[![CI](https://github.com/RonanJonsson-cloud/Kairo/actions/workflows/ci.yml/badge.svg)](https://github.com/RonanJonsson-cloud/Kairo/actions/workflows/ci.yml)
 
 **Live site:** https://main.d2pas0nuhvquyl.amplifyapp.com/
 
 **Try the demo (no sign-in):** https://main.d2pas0nuhvquyl.amplifyapp.com/?demo
 
-**GitHub:** https://github.com/RonanJonsson-cloud/RyanHallBeddingService
+**GitHub:** https://github.com/RonanJonsson-cloud/Kairo
 
 **Stack:**  React · Vite · AWS Amplify
 
