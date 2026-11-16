@@ -64,7 +64,7 @@ describe('Demo', () => {
   it('opens a filled-in business page with no sign-in', async () => {
     open('/?demo')
     expect(await screen.findByRole('note')).toHaveTextContent('demo of the business side')
-    expect(screen.getByLabelText('Business name')).toHaveValue('')
+    expect(screen.getByLabelText('Business name')).toHaveValue('Kairo')
     expect(screen.getByRole('list', { name: 'Available hours' })).toHaveTextContent('Saturday')
     expect(screen.queryByText('Business sign-in')).not.toBeInTheDocument()
     expect(screen.getByText(/No bookings yet/)).toBeInTheDocument()
@@ -84,13 +84,13 @@ describe('Demo', () => {
     expect(link).toMatch(/^\?demo=./)
 
     open(`/${link}`)
-    expect(await screen.findByRole('heading', { level: 1, name: 'Book a time' })).toBeInTheDocument()
+    expect(await screen.findByRole('heading', { level: 1, name: 'Kairo' })).toBeInTheDocument()
     expect(screen.getByRole('note')).toHaveTextContent('demo of the customer side')
     await bookFirstMorning('Sam')
 
     // The booked time is taken for the next customer.
     open(`/${link}`)
-    await screen.findByRole('heading', { level: 1, name: 'Book a time' })
+    await screen.findByRole('heading', { level: 1, name: 'Kairo' })
     click('Appointment')
     click('Monday, October 19')
     click('Next')
@@ -120,7 +120,7 @@ describe('Demo', () => {
 
     open('/?demo')
     fireEvent.click(await screen.findByRole('button', { name: 'Reset demo' }))
-    expect(screen.getByLabelText('Business name')).toHaveValue('')
+    expect(screen.getByLabelText('Business name')).toHaveValue('Kairo')
   })
 
   it('uses the real assistant when the cloud is connected', async () => {
