@@ -4,7 +4,7 @@
 
 **Live site:** https://main.d2pas0nuhvquyl.amplifyapp.com/
 
-**Try the demo (no sign-in):** https://main.d2pas0nuhvquyl.amplifyapp.com/?demo
+**Demo:** https://main.d2pas0nuhvquyl.amplifyapp.com/?demo
 
 **GitHub:** https://github.com/RonanJonsson-cloud/Kairo
 
