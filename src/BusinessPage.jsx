@@ -18,7 +18,7 @@ import {
 let nextId = 1
 
 export const DEFAULT_SETTINGS = {
-  name: 'Kairo',
+  name: '',
   offerAppointments: true,
   appointmentMinutes: DEFAULT_APPOINTMENT_MINUTES,
   offerHandoffs: true,

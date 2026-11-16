@@ -23,7 +23,7 @@ const WORKDAY = { start: '09:00', end: '17:00', breaks: [{ start: '12:00', end: 
 
 export const DEMO_BUSINESS = {
   ...DEFAULT_SETTINGS,
-  name: 'Demo Bedding Service',
+  name: '',
   handoffsTogether: true,
   turnaroundMinutes: 24 * 60,
   hours: [
